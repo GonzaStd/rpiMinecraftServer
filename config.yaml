@@ -18,7 +18,7 @@ network:
   online_mode: null
 
 Gameplay:
-  server_text: null
+  modt: null
   max_players: null
   difficulty: null
   gamemode: null
