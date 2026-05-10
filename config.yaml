@@ -1,0 +1,26 @@
+server:
+  root: null
+  engine: null
+  version_type: null
+  version: null
+
+java:
+  min_ram_gb: null
+  max_ram_gb: null
+
+world:
+  seed: null
+  view_distance: null
+  simulation_distance: null
+
+network:
+  port: null
+  online_mode: null
+
+Gameplay:
+  server_text: null
+  max_players: null
+  difficulty: null
+  gamemode: null
+  hardcore: null
+  pvp: null
