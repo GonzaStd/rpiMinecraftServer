@@ -1,12 +1,13 @@
 import yaml
 from pathlib import Path
-from typing import Type, TypeVar
-from pydantic import BaseModel
+from typing import Type, Any, TypeVar
+from installer.config.schema import PydanticFather
+
+PydanticChild = TypeVar("PydanticChild", bound=PydanticFather)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONFIG_ROOT = PROJECT_ROOT
 GLOBAL_CONFIG_ROOT = Path(DEFAULT_CONFIG_ROOT)
-PydanticChild = TypeVar("PydanticChild", bound=BaseModel)
 
 _ENV_LOADED = False
 
@@ -65,9 +66,12 @@ class ConfigFile(File):
         with open(self.file_path) as f:
             return yaml.safe_load(f)
 
-    def read(self):
+    def read(self) -> PydanticFather:
         data = self.read_raw()
         return self.schema_class(**data)
+
+    def read_defaults(self) -> dict[str, Any]:
+        return self.schema_class.get_defaults()
 
     def change(self, config):
         pass

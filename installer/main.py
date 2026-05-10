@@ -1,22 +1,24 @@
+from rich.pretty import pprint
 from pydantic import ValidationError
-
 from installer.config.loader import ConfigFile
 from installer.config.schema.config import Config
-from rich.pretty import pprint
 
 
 
 def main():
     config = ConfigFile("config.yaml", Config)
-    option = menu_choice()
-    execute_action(option, config)
+    while True:
+        option = menu_choice()
+        execute_action(option, config)
 
 
 def show_config(config: ConfigFile):
-    pass
+    pprint(config.read_raw(), expand_all=True)
 
 
 def change_config(config: ConfigFile):
+    print("\nThis is the default config:")
+    pprint(config.read_defaults(), expand_all=True)
     pass
 
 

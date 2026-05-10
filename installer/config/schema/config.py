@@ -1,10 +1,11 @@
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import Field, field_validator, model_validator
+from installer.config.schema import PydanticFather
 from typing import Literal
 from pathlib import Path
 import re
 
-class Server(BaseModel):
-    root: Path
+class Server(PydanticFather):
+    root: Path = "/srv/minecraft"
     engine: Literal["MOJANG", "PAPER", "PURPUR", "FABRIC"] = "PURPUR"
     version_type: Literal["release", "snapshot"] = "release"
     version: str = "latest"
@@ -41,7 +42,7 @@ class Server(BaseModel):
 
         return self
 
-class Java(BaseModel):
+class Java(PydanticFather):
     min_ram_gb: int =  Field(default=2, ge=1, le=12)
     max_ram_gb: int =  Field(default=4, ge=1, le=12)
 
@@ -61,7 +62,7 @@ class Java(BaseModel):
 
         return self
 
-class World(BaseModel):
+class World(PydanticFather):
     seed: str | None = None
     view_distance: int = Field(default=6, ge=2, le=15)
     simulation_distance: int = Field(default=4, ge=2, le=15)
@@ -72,11 +73,11 @@ class World(BaseModel):
             raise ValueError("Simulation distance cannot exceed view distance.")
         return self
 
-class Network(BaseModel):
+class Network(PydanticFather):
     port: int = Field(default=25565, ge=1024, le=65535)
     online_mode: bool = False
 
-class Gameplay(BaseModel):
+class Gameplay(PydanticFather):
     motd: str = Field( # Server text
         default="Raspberry Pi Minecraft Server",
         min_length=1,
@@ -104,7 +105,7 @@ class Gameplay(BaseModel):
             print("WARNING: 25+ players may significantly "
                   "reduce performance on Raspberry Pi devices")
 
-class Config(BaseModel):
+class Config(PydanticFather):
     server: Server
     java: Java
     world: World
