@@ -1,9 +1,6 @@
-from typing import Any
-
+from pathlib import Path
 import requests
 import json
-from pathlib import Path
-from datetime import datetime
 
 MANIFEST_URL = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
 CACHE_DIR = Path.home() / ".minecraft_cache"
@@ -42,7 +39,7 @@ def get_version_info(
         manifest, 
         version_type: str, 
         version_id: str
-) -> None  | Any:
+) -> None | dict:
     """
     Checks if the version really exists
 
@@ -121,7 +118,7 @@ def extract_java_version(metadata):
         raise ValueError(" javaVersion not found in metadata.")
 
 
-def extract_server_download(metadata):
+def extract_server_download(metadata) -> dict:
     """Extracts server download URL for server.jar"""
     try:
         server_info = metadata["downloads"]["server"]
@@ -135,7 +132,7 @@ def extract_server_download(metadata):
 
 def resolve_minecraft_version(
         version_id: str = "latest",
-                              version_type: str = "release"):
+        version_type: str = "release"):
     """
     Flujo completo:
     1. Downloads manifest
@@ -153,27 +150,24 @@ def resolve_minecraft_version(
     }
     """
 
-    # Paso 1
-    print(f"📥 Descargando manifest de versiones...")
+    print("Downloading manifest...")
     manifest = fetch_manifest()
 
-    # Paso 2
-    print(f"🔍 Resolviendo versión: {version_id}")
-    minecraft_version = get_version_info(manifest, version_id)
-    print(f"   → {minecraft_version}")
+    print("Getting info of your version")
+    minecraft_version = get_version_info(manifest, version_type, version_id)
 
-    # Paso 3
-    print(f"📥 Descargando metadata de {minecraft_version}...")
+    print(f"Dowloading metadata of Minecraft Version {minecraft_version}...")
     metadata = fetch_version_metadata(manifest, minecraft_version)
 
-    # Paso 4
     java_version = extract_java_version(metadata)
     server_info = extract_server_download(metadata)
 
-    print(f"✅ Resuelto:")
-    print(f"   Minecraft: {minecraft_version}")
-    print(f"   Java: {java_version}")
-    print(f"   Server JAR: {server_info['size'] / 1024 / 1024:.1f} MB")
+    print(f"""
+    Resolved:
+        Minecraft: {minecraft_version}
+        Java: {java_version}
+        Server JAR: {server_info['size'] / 1024 / 1024:.1f} MB
+    """)
 
     return {
         "minecraft_version": minecraft_version,
@@ -182,12 +176,3 @@ def resolve_minecraft_version(
         "server_sha1": server_info["sha1"],
         "server_size": server_info["size"]
     }
-
-
-# ========== EJEMPLO DE USO ==========
-
-if __name__ == "__main__":
-    # Prueba
-    result = resolve_minecraft_version("latest")
-    print("\nResultado final:")
-    print(json.dumps(result, indent=2))
