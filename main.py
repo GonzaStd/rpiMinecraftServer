@@ -1,6 +1,7 @@
-from manager.main import main
+import manager.main as startMenu
 try:
-    main()
+    menu = startMenu.Main()
+    menu.main()
 except KeyboardInterrupt:
     print("Cancel\n\n")
     exit()
