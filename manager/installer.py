@@ -1,7 +1,8 @@
 from os import system
-import manager.config.config_manager as config_manager
 from manager.config.loader import ConfigFile
 import manager.interface.interface as interface
+import manager.config.config_manager as config_manager
+import manager.mojang_api
 
 class Installer:
     def __init__(self, config: ConfigFile):
@@ -14,12 +15,16 @@ class Installer:
             option = self._menu_choice()
             self._execute_action(option)
 
+    def _install(self):
+        pass
+
 
     def _menu_choice(self):
         option = interface.select_item([
             "Display configuration",
             "Change configuration",
             "Check configuration",
+            "Install servers from current config",
             "Exit"
         ])
         return option
@@ -34,5 +39,7 @@ class Installer:
             case 3:
                 self.configManager.check_config()
             case 4:
+                self._install()
+            case 5:
                 exit()
         input("Enter any key to get back to menu...")
