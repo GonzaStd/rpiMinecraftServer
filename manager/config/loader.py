@@ -1,7 +1,7 @@
 import yaml
 from pathlib import Path
 from typing import Type, Any, TypeVar
-from installer.config.schema import PydanticFather
+from manager.config.schema import PydanticFather
 
 PydanticChild = TypeVar("PydanticChild", bound=PydanticFather)
 
@@ -76,7 +76,11 @@ class ConfigFile(File):
     def change(self, config):
         pass
 
-    def write(self, config: Type[PydanticChild]):
-        data = config.model_dump()
+    def write(self, config: Type[PydanticChild] | dict):
+        data = None
+        if isinstance(config, self.schema_class):
+            data = config.model_dump()
+        elif isinstance(config, dict):
+            data = config
         with open(self.file_path, 'w') as f:
             yaml.safe_dump(data, f)

@@ -1,5 +1,5 @@
 from pydantic import Field, field_validator, model_validator
-from installer.config.schema import PydanticFather
+from manager.config.schema import PydanticFather
 from typing import Literal
 from pathlib import Path
 import re
