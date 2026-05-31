@@ -48,6 +48,8 @@ fi
 echo -e "\nAutomatically checking and installing pip packages into the environment..."
 .venv/bin/pip install -r requirements.txt
 
+execute_file="main.py"
+
 echo ""   
-ask "Do you want to execute installer.py to proceed with the installation of your server?" && .venv/bin/python3 ./installer.py
+ask "Do you want to execute $execute_file proceed with the installation of your server?" && .venv/bin/python3 ./$execute_file
 echo ""
