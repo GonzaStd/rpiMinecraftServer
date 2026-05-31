@@ -1,12 +1,12 @@
 from os import system
-import manager.config.config_manager as ConfigManager
+import manager.config.config_manager as config_manager
 from manager.config.loader import ConfigFile
 import manager.interface.interface as interface
 
 class Installer:
     def __init__(self, config: ConfigFile):
         self.config = config
-        self.configManager = ConfigManager.ConfigManager(config)
+        self.configManager = config_manager.ConfigManager(config)
 
     def main(self):
         while True:
