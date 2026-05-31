@@ -1,5 +1,5 @@
 from os import system
-from manager import Installer
+from manager import installer
 from manager.config.loader import ConfigFile
 import manager.interface.interface as interface
 from manager.config.schema.config import Config
