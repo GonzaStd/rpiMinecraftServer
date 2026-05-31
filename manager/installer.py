@@ -1,5 +1,5 @@
 from os import system
-import manager.config.ConfigManager as ConfigManager
+import manager.config.config_manager as ConfigManager
 from manager.config.loader import ConfigFile
 import manager.interface.interface as interface
 
